@@ -1,45 +1,36 @@
 def solution(line):
-    pos, answer = [], []
-    n = len(line)
-    
+    meet = list()
+    # n = len(line)
+
     x_min = y_min = int(1e15)
     x_max = y_max = -int(1e15)
     # 주어진 직선에서 교점 구하기
     # 시간 복잡도 O(n^2)보다 조금 더 빠름
-    for i in range(n):
+    for i in range(len(line)):
         a, b, e = line[i]
-        for j in range(i + 1, n):
+        for j in range(i + 1, len(line)):
             c, d, f = line[j]
-            if a * b == b * c:
+            if (a * b) - (b * c) == 0:  # (2) 뺄셈하여 0과 비교로 변경
                 continue
-            x = (b * f - e * d) / (a * d - b * c)
-            y = (e * c - a * f) / (a * d - b * c)
+            x = ((b * f) - (e * d)) / ((a * d) - (b * c)) # 괄호를 추가하여 계신 실수 방지
+            y = ((e * c) - (a * f)) / ((a * d) - (b * c))
 
             # 정수 교점만 저장
-            if x == int(x) and y == int(y):
+            if x.is_integer() and y.is_integer():
                 x = int(x)
                 y = int(y)
-                pos.append([x, y])
+                meet.append([x, y])
+                x_max, y_max = max(x_max, x), max(y_max, y)
+                x_min, y_min = min(x_min, x), min(y_min, y)
 
-                if x_min > x:
-                    x_min = x
-                if y_min > y:
-                    y_min = y
-                if x_max < x:
-                    x_max = x
-                if y_max < y:
-                    y_max = y
+    width = abs(x_max - x_min) + 1
+    height = abs(y_max - y_min) + 1
+    answer = [["."] * width for _ in range(height)]
+    meet = sorted(meet, key = lambda i: -i[1])
 
-    x_len = x_max - x_min + 1
-    y_len = y_max - y_min + 1
-    coord = [["."] * x_len for _ in range(y_len)]
+    for x, y in meet:
+        ny = y_max - y
+        nx = x - x_min
+        answer[ny][nx] = "*"
 
-    for star_x, star_y in pos:
-        nx = star_x + abs(x_min) if x_min < 0 else star_x - x_min
-        ny = star_y + abs(y_min) if y_min < 0 else star_y - y_min
-        coord[ny][nx] = "*"
-        
-    for result in coord:
-        answer.append(''.join(result))
-        
-    return answer[::-1]
+    return list(map(''.join, answer))
