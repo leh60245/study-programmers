@@ -20,6 +20,7 @@ def solution(line):
                 x = int(x)
                 y = int(y)
                 meet.append([x, y])
+                # 교점을 모두 모은 상태에서 할 때, 추가 비용이 발생하므로, 교점을 계산했을 때마다 수치를 확인
                 x_max, y_max = max(x_max, x), max(y_max, y)
                 x_min, y_min = min(x_min, x), min(y_min, y)
 
