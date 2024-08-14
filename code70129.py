@@ -1,20 +1,11 @@
-def radixChage(n, radix):
-    if n == 0:
-        return "0"
-    nums = []
-    while n:
-        n, digith = divmod(n, radix)
-        nums.append(str(digith))
-    return "".join(reversed(nums))
-
 def solution(s):
-    answer = [0,0]
+    change, zero = 0, 0
     while s != "1":
-        c = len("".join([i if i != "0" else "" for i in s]))
-        answer[1] += len(s) - c
-        s = radixChage(c, 2)
-        answer[0] += 1
-    return answer
+        change += 1
+        num = s.count('1')  # count() 메서드를 사용하여 1의 개수를 알아낼 수 있다.
+        zero += len(s) - num    # 단순하게 길이를 빼는 것으로 알 수 있다.
+        s = bin(num)[2:]
+    return [change, zero]
 
 print(solution("110010101001"))
     
