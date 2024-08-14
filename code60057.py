@@ -11,23 +11,27 @@
 Q. 압축된 코드를 가지고 있어야 하는가?
 A. 필요 없다. b/c 압축된 문자열이 중요한 게 아니라, 압축된 문자열의 '길이'가 중요하다. 
 """
+
+
 def solution(s):
     answer = len(s)
-    for i in range(1, len(s)//2 + 1):
-        tmp = 0
-        tmp_s = ""
-        save_s = ""
-        for j in range(0, len(s)+1, i):
-            if tmp_s != s[j:j+i]:
-                save_s = save_s + str(tmp) + tmp_s if tmp > 1 else save_s + tmp_s
-                tmp = 1
-                tmp_s = s[j:j+i]
-                continue
-            tmp += 1
-        save_s = save_s + s[j:]
-        print(i, save_s)
-        answer = len(save_s) if answer > len(save_s) else answer
+    for x in range(1, len(s) // 2 + 1):
+        comp_len = 0
+        comp = ""
+        cnt = 1
+        for i in range(0, len(s) + 1, x):
+            tmp = s[i : i + x]
+            if comp == tmp:
+                cnt += 1
+            elif comp != tmp:
+                comp_len += len(tmp)
+                if cnt > 1:
+                    comp_len += len(str(cnt))
+                cnt = 1
+                comp = tmp
+        answer = min(answer, comp_len)
     return answer
+
 
 print(solution("aabbaccc"))
 
@@ -36,6 +40,5 @@ print(solution("ababcdcdababcdcd"))
 print(solution("abcabcdede"))
 
 print(solution("abcabcabcabcdededededede"))
-
 
 print(solution("xababcdcdababcdcd"))
