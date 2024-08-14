@@ -1,13 +1,10 @@
 def solution(s):
-    while len(s) > 1:
-        s = list(s)
-        for i in range(len(s) - 1):
-            if s[i] == s[i+1]:
-                s[i] = s[i+1] = ''
-            
-            new_s = ''.join(s)
-            if len(s) == len(new_s):
-                break
-            s = new_s
-        
-    return 1 if len(s) == 0 else 0
+    stack = []
+    for i in range(len(s)):
+        if stack != [] and stack[-1] == s[i]:
+            stack.pop()
+            continue
+        stack.append(s[i])
+    return 1 if stack == [] else 0
+
+print(solution("aabba"))
