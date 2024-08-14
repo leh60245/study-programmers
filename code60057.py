@@ -10,27 +10,40 @@
 그 외 고민사항
 Q. 압축된 코드를 가지고 있어야 하는가?
 A. 필요 없다. b/c 압축된 문자열이 중요한 게 아니라, 압축된 문자열의 '길이'가 중요하다. 
+
+풀이방법 2. 문자열에서 가능한 모든 규칙을 뽑아내서 비교하기
+1. 압축 가능한 길이만큼 순회하기
+2. 전체 문자열에서 가능한 모든 규칙을 먼저 생성하기
+3. 만든 규칙을 전부 비교 검사하기
+4. 압축 과정에서 나온 문자열의 길이와 원래 문자열의 길이 비교하기
 """
 
 
+def compress(s, length):
+    # 전체 문자열에서 가능한 모든 규칙 생성
+    words = [s[i : i + length] for i in range(0, len(s), length)]
+
+    # 만든 규칙을 전부 비교 검사
+    res = []  # 압축된 단어와 반복 횟수를 저장하는 배열
+    cur_word = words[0]  # 첫 번째 단어 저장
+    cur_cnt = 1
+    for pattern, compare in zip(words, words[1:] + [""]):
+        if pattern == compare:
+            cur_cnt += 1
+            continue
+        res.append([cur_word, cur_cnt])
+        cur_word = compare
+        cur_cnt = 1
+
+    # 압축 과정에서 나온 문자열의 길이와 원래 문자열의 길이 비교
+    ### 배워갈 점: if else 구문을 ()로 묶어 범위를 지정할 수 있다. ###
+    return sum(len(word) + (len(str(cnt)) if cnt > 1 else 0) for word, cnt in res)
+
+
 def solution(s):
-    answer = len(s)
-    for x in range(1, len(s) // 2 + 1):
-        comp_len = 0
-        comp = ""
-        cnt = 1
-        for i in range(0, len(s) + 1, x):
-            tmp = s[i : i + x]
-            if comp == tmp:
-                cnt += 1
-            elif comp != tmp:
-                comp_len += len(tmp)
-                if cnt > 1:
-                    comp_len += len(str(cnt))
-                cnt = 1
-                comp = tmp
-        answer = min(answer, comp_len)
-    return answer
+    if len(s) == 1:
+        return 1
+    return min(compress(s, length) for length in list(range(1, len(s) // 2 + 1)))
 
 
 print(solution("aabbaccc"))
