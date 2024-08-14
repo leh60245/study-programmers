@@ -7,34 +7,28 @@
 
 
 def solution(new_id):
-    # 1. 소문자 치환
     new_id = new_id.lower()
 
-    # 2. 사용 가능한 문자를 제외한 모든 문자 제거
-    available_characters = (
-        [chr(i) for i in range(ord("a"), ord("z") + 1)]
-        + [str(i) for i in range(10)]
-        + ["-", "_", "."]
-    )
-    tmp = []
-    for i in new_id:
-        if i in available_characters:
-            if i == "." and (tmp == [] or tmp[-1] == "."):
-                continue
-            tmp.append(i)
-    if tmp != [] and tmp[-1] == ".":
-        tmp = tmp[:-1]
-    new_id = "".join(tmp)
+    filtered = []
+    for c in new_id:
+        if c.isalpha() or c.isdigit() or c in ("-", "_", "."):
+            filtered.append(c)
+    new_id = "".join(filtered)
 
-    # 5, 6
+    while ".." in new_id:
+        new_id = new_id.replace("..", ".")
+
+    new_id = new_id.strip(".")
+
     if new_id == "":
         new_id = "a"
     if len(new_id) > 15:
         new_id = new_id[:15]
-        if new_id[-1] == ".":
-            new_id = new_id[:-1]
-    if len(new_id) <= 2:
-        new_id = new_id + (new_id[-1] * (3 - len(new_id)))
+    if new_id[-1] == ".":
+        new_id = new_id[:-1]
+
+    while len(new_id) < 3:
+        new_id += new_id[-1]
 
     return new_id
 
