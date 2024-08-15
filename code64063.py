@@ -1,18 +1,15 @@
-import sys
-sys.setrecursionlimit(2000)
-
-def find_emptyroom(chk, rooms):
-    if chk not in rooms:
-        rooms[chk] = chk + 1
-        return chk
-    empty = find_emptyroom(rooms[chk], rooms)
-    rooms[chk] = empty + 1
-    return empty
-
 def solution(k, room_number):
-    rooms = dict()
-    for num in room_number:
-        _ = find_emptyroom(num, rooms)
-    return list(rooms)
+    room_dic = {}
+    ret = []
+    for i in room_number:
+        n = i
+        visit = [n]
+        while n in room_dic:
+            n = room_dic[n]
+            visit.append(n)
+        ret.append(n)
+        for j in visit:
+            room_dic[j] = n + 1
+    return ret
 
-print(solution(10, [1,3,4,1,3,1]))
+print(solution(10, [1, 3, 4, 1, 3, 1]))
