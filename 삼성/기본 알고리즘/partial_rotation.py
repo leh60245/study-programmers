@@ -15,8 +15,8 @@ def rotate_90(sy, sx, length):
 
 arr = [[7 * j + i for i in range(1, 8)] for j in range(7)]
 new_arr = [[0] * 7 for _ in range(7)]
-sy, sx = 2, 2   # 좌상단 좌표
-length = 3      # 돌릴 사각형의 길이
+sy, sx = 2, 2
+length = 3
 
 rotate_90(sy, sx, length)
 
